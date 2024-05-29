@@ -55,7 +55,7 @@ fn main() -> Result<(), Error> {
         string_builder.push_str("## Image to ASCII\n\n");
         string_builder.push_str("### How to build \n \n");
 
-        string_builder.push_str("```bash\n cargo buld \n ```\n\n");
+        string_builder.push_str("```bash\n cargo build \n ```\n\n");
 
         string_builder.push_str("### How to run \n \n");
         string_builder.push_str(
