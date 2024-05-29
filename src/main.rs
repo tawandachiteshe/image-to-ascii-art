@@ -1,11 +1,36 @@
-use image::{GenericImageView, PixelWithColorType};
+type Error = Box<dyn std::error::Error + Send + Sync>;
+fn main() -> Result<(), Error> {
+    let (_args, argv) = argmap::new().parse(std::env::args());
 
-fn main() {
-    let _img = image::open("chad.jpg").unwrap();
+    if !argv.contains_key("i") || !argv.contains_key("w") || !argv.contains_key("h") {
+        println!("Usage: chad-ascii -i <path> -w <width> -h <height>");
+        return Ok(());
+    }
 
-    let mut _img2 = _img.flipv().rotate90().grayscale();
-    let img = _img2
-        .resize(128, 128, image::imageops::FilterType::Gaussian)
+    let image_path = argv.get("i").to_owned().unwrap().first().unwrap();
+    let width: u32 = argv
+        .get("w")
+        .to_owned()
+        .unwrap()
+        .first()
+        .unwrap()
+        .parse()
+        .expect("Invalid width");
+    let height: u32 = argv
+        .get("h")
+        .to_owned()
+        .unwrap()
+        .first()
+        .unwrap()
+        .parse()
+        .expect("Invalid height");
+
+    let img = image::open(image_path)
+        .unwrap()
+        .flipv()
+        .rotate90()
+        .grayscale()
+        .resize(width, height, image::imageops::FilterType::Gaussian)
         .into_luma8();
 
     // img.save("lisa.resize.jpg").unwrap();
@@ -23,6 +48,7 @@ fn main() {
 
         string_builder.push_str("\n");
     }
-
     println!("{}", string_builder);
+
+    Ok(())
 }
